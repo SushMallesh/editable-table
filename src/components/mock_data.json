@@ -1,0 +1,34 @@
+[{
+    "EmployeeID": 1,
+    "FirstName":"Davolio",
+    "LastName": "Davolio",
+    "Title": "Sales Representative"
+},
+{
+
+    "EmployeeID": 2,
+    "FirstName":"Fuller",
+    "LastName": "Andrew",
+    "Title": "Vice President"
+},
+{
+
+    "EmployeeID": 3,
+    "FirstName":"Leverling",
+    "LastName": "Janet",
+    "Title": "Sales Representative"
+},
+{
+   
+    "EmployeeID": 4,
+    "FirstName":"Buchanan",
+    "LastName": "Steven",
+    "Title": "Sales Manager"
+},
+{
+    "EmployeeID": 5,
+    "FirstName":"Buchanan",
+    "LastName": "Steven",
+    "Title": "Sales Manager"
+}
+]

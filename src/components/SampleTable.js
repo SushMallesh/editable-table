@@ -1,16 +1,24 @@
 import React from 'react'
 import { useTable } from 'react-table'
-// import makeData from './makeData'
+import { Button } from 'react-bootstrap'
+import './table.css'
 
 const EditResponse = ({
   cell:{value},
   row: { index },
   column: { id },
   updateMyData,
+  setFilter
+  
 }) => {
-
   const onChange = e => {
-    updateMyData(index, id, e.target.value)
+    if(e.target.value === "No"){
+      setFilter(true)
+    }else{
+      setFilter(false)
+    }
+    updateMyData(index, id, e.target.value)  
+   
   }
 
   const ResponseValues = value.split(",")
@@ -33,7 +41,7 @@ const EditEvidenceCell = ({
   return <input type="file" name="upload file" onChange={onChange}/>
 }
 
-function Table({ columns, data, updateMyData }) {
+function Table({ columns, data, setFilter,updateMyData }) {
 
   const {
     getTableProps,
@@ -45,9 +53,11 @@ function Table({ columns, data, updateMyData }) {
     {
       columns,
       data,
+      setFilter,
       updateMyData,
     },
   )
+
 
   return (
 
@@ -68,7 +78,6 @@ function Table({ columns, data, updateMyData }) {
               return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cell) => {   
-                
                 return (
                   
                     <td {...cell.getCellProps()}>
@@ -89,11 +98,17 @@ export const SampleTable =(props)=> {
 
   const {items} = props
 
+  const [isFiltered,setIsFiltered] = React.useState(false)
+
   const [data,setData] = React.useState([])
 
-  // const [data,setData] = React.useState(()=>makeData([]))
+    const onClickSubmitBtn = () =>{
+      return JSON.stringify(data)
+    }
+
 
     React.useEffect(()=>{
+
       setData(items.map(item=>({
         ID:item.ID,
         Question:item.Question,
@@ -104,7 +119,6 @@ export const SampleTable =(props)=> {
       })))
     },[items])
 
-  console.log("data",data)
 
   const columns = React.useMemo(
     () => [
@@ -136,14 +150,18 @@ export const SampleTable =(props)=> {
       },
     ],[])
 
- 
-  const updateMyData = (rowIndex, columnId, value) => {
     
-    setData(old =>
-      old.map((row, index) => {
+    const setFilter = (bool) =>{
+      setIsFiltered(bool)
+    }
+
+  const updateMyData = (rowIndex, columnId, value) => {
+
+    setData(oldData =>
+      oldData.map((row, index) => {
         if (index === rowIndex) {
           return {
-            ...old[rowIndex],
+            ...oldData[rowIndex],
             [columnId]: value,
           }
         }
@@ -153,13 +171,14 @@ export const SampleTable =(props)=> {
   }
   return (
     <>
-      {/* <input type="file" name="excel file" onChange={(e)=>onHandleFile(e)}/> */}
-        <Table
-          columns={columns}
-          data={props.items}
-          updateMyData={updateMyData}
-        
-        />
+      <Table
+        columns={columns}
+        data={isFiltered?props.items.filter(item => item.ID!=='A03'):props.items}
+        updateMyData={updateMyData}
+        setFilter ={setFilter}
+      
+      />
+      <Button onClick={onClickSubmitBtn}>Submit</Button>
     </>
    
   )

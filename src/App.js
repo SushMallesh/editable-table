@@ -1,67 +1,36 @@
-
-import './App.css';
-
-// import * as XLSX from "xlsx";
-
-// import DisplayData from './components/DisplayData'
-
-// import { useState } from 'react';
-
-import { BasicTable } from './components/BasicTable';
+import React from 'react'
+import './App.css'
+import {SampleTable} from './components/SampleTable'
+import * as XLSX from 'xlsx'
+// import {getItems} from './components/getItems'
 
 function App() {
 
-  // const [items, setItems] = useState([]);
+  const [data,setData] = React.useState([])
 
-  // const readExcelFile = async(file) => {
-  //   const promise = new Promise((resolve, reject) => {
-  //     const fileReader = new FileReader();
-  //     fileReader.readAsArrayBuffer(file);
+  const onHandleFile = async(e)=>{
 
-  //     fileReader.onload = (e) => {
-  //       const bufferArray = e.target.result;
+    const file = e.target.files[0]
+    const data = await file.arrayBuffer()
 
-  //       const wb = XLSX.read(bufferArray, { type: "buffer" });
+    const workbook = XLSX.readFile(data)
 
-  //       const wsname = wb.SheetNames[0];
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]]
+    // const jsonData = XLSX.utils.sheet_to_json(worksheet,{
+    // defval:''
+    // })
 
-  //       const ws = wb.Sheets[wsname];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet)
+    
+    setData(jsonData)
 
-  //       const data = XLSX.utils.sheet_to_json(ws);
-
-  //       console.log(data);
-        
-  //       resolve(data);
-  //     };
-
-  //     fileReader.onerror = (error) => {
-  //       reject(error);
-  //     };
-  //   });
-
-  //   promise.then((d) => {
-  //     setItems(d);
-  //   });
-  // };
-
-
-
+  }
   return (
     <div className="App">
-        <BasicTable/>
-      {/* <h1>Questionnaire</h1>
-      <header className="App-header">
-        <input type="file" onChange ={(event) => {
-          const xlFile = event.target.files[0]
-          readExcelFile(xlFile)
-        }}/>
-
-        <DisplayData data ={items}/>
-      
-      </header> */}
-    
+      <input type="file" name="excel file" onChange={(e)=>onHandleFile(e)}/>
+      <SampleTable items={data}/>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

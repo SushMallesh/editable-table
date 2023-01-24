@@ -14,7 +14,8 @@ const EditResponse = ({
   const onChange = e => {
     if(e.target.value === "No"){
       setFilter(true)
-    }else{
+    }
+    if(e.target.value === "Yes){
       setFilter(false)
     }
     updateMyData(index, id, e.target.value)  
